@@ -40,6 +40,7 @@ public class KNN {
             dataset.add(new datapoint(Double.parseDouble(feature[0]), Double.parseDouble(feature[1]), Double.parseDouble(feature[2]), Double.parseDouble(feature[3]), flowerType));
          }
      }
+     input.close();
       }
       catch(FileNotFoundException e){
           System.out.print(e);
@@ -77,6 +78,7 @@ public class KNN {
           System.out.println("this one is wrong");
        }
    }
+   input.close();
       }
       catch(FileNotFoundException e){
         System.out.println(e);

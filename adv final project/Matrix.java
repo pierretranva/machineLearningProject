@@ -4,6 +4,7 @@ public class Matrix{
     public Double[][] data;
     private int row;
     private int col;
+    
     //constructor for matrix
     public Matrix(int r, int c){
         row = r;
@@ -42,7 +43,33 @@ public class Matrix{
            }
            return result;
        }
- 
+ public Matrix add(Matrix m){
+     Matrix result = new Matrix(this.getRow(), this.getCol());
+     for(int i = 0; i< row; i++){
+         for(int j =0; j<col; j++){
+             result.data[i][j] = this.data[i][j] + m.data[i][j];
+         }
+     }
+     return result;
+    }
+    public Matrix sigmoid(){
+        Matrix result = new Matrix(this.getRow(), this.getCol());
+        for(int i = 0; i< row; i++){
+            for(int j =0; j<col; j++){
+                result.data[i][j] = 1/(1+Math.exp(-1*data[i][j]));
+            }
+        }
+        return result;
+    }
+    public Matrix transpose(){
+        Matrix result = new Matrix(this.getCol(), this.getRow());
+        for(int i = 0; i< row; i++){
+            for(int j =0; j<col; j++){
+                result.data[j][i] = data[i][j];
+            }
+        }
+        return result;
+    }
     
     public String toString(){
         String output = "";

@@ -1,7 +1,7 @@
 import java.io.File;
-
+import java.lang.*;
 public class machineLearningDriver {
-   /* public static void main(String[] args){
+    public static void main(String[] args){
         String traindata = "IRIS.csv";
         String testdata = "IRIS_TEST.csv";
         File trainFile = new File(traindata);
@@ -13,8 +13,9 @@ public class machineLearningDriver {
 
      
         System.out.println(acc);
-    } */
+    } 
     //test matrix mult method
+    /*
     public static void main(String[] args){
         Double[][] arr = {{1.0, 2.0,3.0, 4.0}, {3.0, 6.0, 2.0, 4.0}};
         Double[][] yarr = {{2.0, 3.0}, {5.0, 7.0},{5.0, 7.0}, {7.0, 1.0}};
@@ -24,4 +25,5 @@ public class machineLearningDriver {
         System.out.print(thing);
         
     }
+    */
 }
