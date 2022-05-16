@@ -10,9 +10,13 @@ public class machineLearningDriver {
         kModel.train(100, trainFile);
         //System.out.println(kModel.getDataset());
         Double acc= kModel.test(30,testFile);
+        System.out.println("KNN accuracy: " + acc);
 
-     
-        System.out.println(acc);
+
+        NN nnModel = new NN(4,3,"weights.txt");
+        nnModel.fit(100, trainFile);
+        Double NNaccuracy = nnModel.test(30,testFile);
+        System.out.println("NN accuracy: " + NNaccuracy);
     } 
     //test matrix mult method
     /*
