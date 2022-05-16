@@ -7,64 +7,56 @@ public class NN{
     private Matrix HO; //3x4
     private Matrix IHBias; //4x1
     private Matrix HOBias; //3x1
-    private double learningRate = 0.1;
+    private double learningRate =0.0000001;
     private Matrix Hidden; //4x1
     private Matrix inputdata; //4x1
   
     //constructor takes in txt file to populate weights
     public NN(int numInputs, int numOutputs, String fileName){
-        try{
-            Scanner input = new Scanner(fileName);
-            String line = input.nextLine();
-            String[] split =line.split(",");
+  
             Double[][] IHdata = new Double[4][4];
             for(int i =0; i<4; i++){
                 for(int j =0; j<4; j++){
-                    IHdata[i][j]=1.0;
+                    IHdata[i][j]=Math.random();
                 }
             }
             IH = new Matrix(4,4,IHdata);
 
-            line = input.nextLine();
-            String[] splitHO =line.split(",");
+           
             Double[][] HOdata = new Double[3][4];
             for(int i =0; i<3; i++){
                 for(int j =0; j<4; j++){
-                    HOdata[i][j]=1.0;
+                    HOdata[i][j]=Math.random();
                 }
             }
             HO = new Matrix(3,4,HOdata);
 
-           line = input.nextLine();
-            String[] splitIHBias =line.split(",");
+          
             Double[][] IHBiasdata = new Double[4][1];
             for(int i =0; i<4; i++){
                 for(int j =0; j<1; j++){
-                    IHBiasdata[i][j]=1.0;
+                    IHBiasdata[i][j]=Math.random();
                 }
             }
             IHBias = new Matrix(4,1,IHBiasdata);
 
-            line = input.nextLine();
-            String[] splitHOBias =line.split(",");
+         
             Double[][] HOBiasdata = new Double[3][1];
             for(int i =0; i<3; i++){
                 for(int j =0; j<1; j++){
-                    HOBiasdata[i][j]=1.0;
+                    HOBiasdata[i][j]=Math.random();
                 }
             }
             HOBias = new Matrix(3,1,IHdata);
 
-        }
-        catch(Exception e){
-            System.out.print(e);
-        }
         
+
        Hidden = new Matrix(4,1);
        inputdata = new Matrix(4,1);
+       System.out.println(IHBias);
         
     }
-    
+    //reads the weights.txt file and populates the weights/bias matracies
     public void populateWeights(){
         try{
             Scanner input = new Scanner("weights.txt");
@@ -131,9 +123,9 @@ public class NN{
                 case "Iris-virginica": flowerType =3;
                 break;
                 }
-                Matrix target = new Matrix(4,1);
+                Matrix target = new Matrix(3,1);
                 //populates target matrix with correct flower type
-                for(int j =0; j<4; j++){
+                for(int j =0; j<3; j++){
                     if(j==flowerType){
                         target.data[j][0] = 1.0;
                     }
@@ -142,8 +134,9 @@ public class NN{
                     }
                 }
                 train(target);
+                saveWeights();
         }
-        saveWeights();
+        
     }
         
         catch(FileNotFoundException e){
@@ -175,10 +168,11 @@ public class NN{
         
         
     }
+    //runs through the forward propogration algoritm to predict the type of flower
     public Matrix getOutput(Matrix inputlayer){
         Matrix output = new Matrix(3,1);
-        inputlayer = inputlayer.sigmoid();
-        Hidden =IH.multiply(inputlayer);
+        inputdata = inputdata.sigmoid();
+        Hidden =IH.multiply(inputdata);
         Hidden = Hidden.add(IHBias);
         Hidden = Hidden.sigmoid();
         output = HO.multiply(Hidden);
@@ -189,7 +183,8 @@ public class NN{
     }
     //updates compares the forward propvalues results and changes the values of weights/bias to make NN more acurate
     public void backProp(Matrix output, Matrix error){
-        Matrix gradient =output.dsigmoid();
+        Matrix gradient = new Matrix(3,1);
+        gradient =output.dsigmoid();
         gradient = gradient.multiply(error);
         gradient = gradient.multiply(learningRate);
 
@@ -214,6 +209,7 @@ public class NN{
 
       
     }
+
     public void saveWeights(){
         try{
             PrintWriter output = new PrintWriter("weights.txt");
@@ -237,7 +233,7 @@ public double test(int batch, File file){
         //System.out.println("Testing: " + line);
         String[] feature = line.split(",");
         Matrix testdata = new Matrix(3,1);
-        for(int j=0; j<feature.length; j++){
+        for(int j=0; j<testdata.getRow(); j++){
             testdata.data[j][0] = Double.parseDouble(feature[j]);
         }
         if(feature.length<4){
@@ -273,11 +269,11 @@ input.close();
       return accuracy;
     }
     
-
+//takes the output matrix and converts numbers to the type of flower
 public int predict(Matrix input){
     Matrix prediction = getOutput(input);
     
-        if(prediction.data[0][0]>prediction.data[1][1] && prediction.data[0][0]>prediction.data[2][0]){
+        if(prediction.data[0][0]>prediction.data[1][0] && prediction.data[0][0]>prediction.data[2][0]){
             return 1;
         }
         else if(prediction.data[1][0]>prediction.data[0][0] && prediction.data[1][0]>prediction.data[2][0]){
