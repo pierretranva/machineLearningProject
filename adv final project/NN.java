@@ -17,7 +17,7 @@ public class NN{
             Double[][] IHdata = new Double[4][4];
             for(int i =0; i<4; i++){
                 for(int j =0; j<4; j++){
-                    IHdata[i][j]=Math.random();
+                    IHdata[i][j]=Math.random()*.5;
                 }
             }
             IH = new Matrix(4,4,IHdata);
@@ -26,7 +26,7 @@ public class NN{
             Double[][] HOdata = new Double[3][4];
             for(int i =0; i<3; i++){
                 for(int j =0; j<4; j++){
-                    HOdata[i][j]=Math.random();
+                    HOdata[i][j]=Math.random()*1;
                 }
             }
             HO = new Matrix(3,4,HOdata);
@@ -53,7 +53,7 @@ public class NN{
 
        Hidden = new Matrix(4,1);
        inputdata = new Matrix(4,1);
-       System.out.println(IHBias);
+     
         
     }
     //reads the weights.txt file and populates the weights/bias matracies
@@ -62,15 +62,15 @@ public class NN{
             Scanner input = new Scanner("weights.txt");
             for (int i = 0; i < 4; i++){
                 String line = input.next();    
-                System.out.println(line);
+                
                 String[] split = line.split(",");
 
                 if (i == 0){
                     for (int j = 0; j < 4; j++){
                         for (int k = 0; k < 4; k++){
                             IH.setVal(j,k, Double.parseDouble(split[j*4+k]));
-                            System.out.println(Double.parseDouble(split[j*4+4]));
-                            System.out.println("YOUOIUHSDH ");
+                            
+                            
                         }
                     }
                 }
@@ -104,6 +104,7 @@ public class NN{
     public void fit(int batch, File file){
         try{
             Scanner scan = new Scanner(file);
+           
             for(int i =0; i<batch; i++){
                 
                 String line = scan.next();
@@ -136,8 +137,10 @@ public class NN{
                 train(target);
                 saveWeights();
         }
+
         
-    }
+    
+}
         
         catch(FileNotFoundException e){
             System.out.println(e);
@@ -151,7 +154,6 @@ public class NN{
         Matrix output = forwardProp();
         Matrix error = target.subtract(output);
         backProp(output, error);
-        
     }
 
     //multiplies input with weight layers and gets output
@@ -171,7 +173,7 @@ public class NN{
     //runs through the forward propogration algoritm to predict the type of flower
     public Matrix getOutput(Matrix inputlayer){
         Matrix output = new Matrix(3,1);
-        inputdata = inputdata.sigmoid();
+        inputdata = inputlayer.sigmoid();
         Hidden =IH.multiply(inputdata);
         Hidden = Hidden.add(IHBias);
         Hidden = Hidden.sigmoid();
@@ -179,7 +181,6 @@ public class NN{
         output = output.add(HOBias);    
         output = output.sigmoid();
         return output;
-
     }
     //updates compares the forward propvalues results and changes the values of weights/bias to make NN more acurate
     public void backProp(Matrix output, Matrix error){
@@ -206,8 +207,6 @@ public class NN{
 
         IH = IH.add(ih_delta);
         IHBias = IHBias.add(hiddenGradient);
-
-      
     }
 
     public void saveWeights(){
@@ -217,6 +216,7 @@ public class NN{
             output.print(HO.toString());
             output.print(IHBias.toString());
             output.print(HOBias.toString());
+            output.println("hello");
         }
     catch(Exception e){
     System.out.println("Error: " + e);
@@ -232,7 +232,7 @@ public double test(int batch, File file){
         String line = input.next();
         //System.out.println("Testing: " + line);
         String[] feature = line.split(",");
-        Matrix testdata = new Matrix(3,1);
+        Matrix testdata = new Matrix(4,1);
         for(int j=0; j<testdata.getRow(); j++){
             testdata.data[j][0] = Double.parseDouble(feature[j]);
         }
@@ -250,12 +250,11 @@ public double test(int batch, File file){
          break;
 
         }
-
+        
         if(predict(testdata)==flowerType){
           correct +=1.0;
         }
-        else
-        System.out.println("this one is wrong");
+        
      }
     
 }
@@ -272,15 +271,20 @@ input.close();
 //takes the output matrix and converts numbers to the type of flower
 public int predict(Matrix input){
     Matrix prediction = getOutput(input);
+    //System.out.println(prediction);
     
         if(prediction.data[0][0]>prediction.data[1][0] && prediction.data[0][0]>prediction.data[2][0]){
+          // System.out.println(1);
             return 1;
         }
         else if(prediction.data[1][0]>prediction.data[0][0] && prediction.data[1][0]>prediction.data[2][0]){
-        return 2;
+           // System.out.println(2);
+            return 2;
         }
         else
+        //System.out.println(3);
         return 3;
+        
   
 }
 }

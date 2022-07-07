@@ -34,12 +34,17 @@ public class Matrix{
     }
     
        public Matrix multiply(Matrix a) {
-		Matrix result = new Matrix(this.getRow(), a.getCol());
-        for(int i=0;i<a.getRow();i++)
+		Matrix result = new Matrix(this.row, a.getCol());
+        for(int i=0;i<result.row;i++)
 		{
-			for(int j=0;j<a.getCol();j++)
+			for(int j=0;j<result.col;j++)
 			{
-				result.data[i][j]= this.data[i][j]*a.data[i][j];
+                Double cell=0.0;
+				for(int t =0;t<this.col;t++){
+                    cell += this.data[i][t]*a.data[t][j];
+                    
+                }
+                result.data[i][j]=cell;
 			}
 		}
         return result;
@@ -48,7 +53,7 @@ public class Matrix{
        public Matrix multiply(double a){
             for(int i =0; i< row; i++){
                 for(int j =0; j<col; j++){
-                    this.data[row][col] =this.data[row][col] *a;
+                    this.data[i][j] =this.data[i][j] *a;
                 }
             }
             return this;
@@ -88,9 +93,9 @@ public class Matrix{
         return result;
     }
     public Matrix dsigmoid(){
-        Matrix temp = new Matrix(this.row, this.col);
+        Matrix temp = new Matrix(row, col);
         for(int i =0;i<row; i++){
-            for(int j=0; i<col; j++){
+            for(int j=0; j<col; j++){
                 temp.data[i][j] = data[i][j]*(1-data[i][j]);
             }
         }
